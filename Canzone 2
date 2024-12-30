@@ -1,0 +1,39 @@
+from midiutil import MIDIFile
+
+# Parametri principali
+tempo = 90  # BPM
+track = 0
+channel = 0
+volume = 100
+duration = 1  # Durata della nota in quarti di nota
+
+# Creazione del file MIDI
+midi = MIDIFile(1)  # Una traccia
+midi.addTempo(track, 0, tempo)
+
+# Aggiunta di una sequenza di accordi (C, G, Am, F)
+chords = [
+    [60, 64, 67],  # C maggiore
+    [55, 59, 62],  # G maggiore
+    [57, 60, 64],  # A minore
+    [53, 57, 60],  # F maggiore
+]
+
+start_time = 0  # Inizio della sequenza
+for _ in range(4):  # Ripetere gli accordi per 4 battute
+    for chord in chords:
+        for note in chord:
+            midi.addNote(track, channel, note, start_time, duration, volume)
+        start_time += duration
+
+# Aggiunta di una melodia semplice
+melody_notes = [60, 62, 64, 65, 67, 65, 64, 62]  # C-D-E-F-G-F-E-D
+for note in melody_notes:
+    midi.addNote(track, channel, note, start_time, duration / 2, volume)
+    start_time += duration / 2
+
+# Salvare il file MIDI
+with open("Pop_Mood_Allegro_90BPM.mid", "wb") as output_file:
+    midi.writeFile(output_file)
+
+print("File MIDI creato: Pop_Mood_Allegro_90BPM.mid")
